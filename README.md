@@ -8,9 +8,11 @@ docker build -t="dreamsxin/camoufox-builder:v1.0" .
 # 查看镜像
 docker images dreamsxin/camoufox-builder
 # 运行容器 -d 后台运行 -t 表示返回一个 tty 终端，-i 表示打开容器的标准输入，使用这个命令可以得到一个容器的 shell 终端 -p 端口映射
-docker run -dti --name camoufox-builder -p 8080:80 dreamsxin/camoufox-builder:v1.0
+docker run -dti --name camoufox-builder "$(pwd):/app" -p 8080:80 dreamsxin/camoufox-builder:v1.0
 # 查看运行的容器
 docker ps
+# 连接已运行的容器
+docker exec -it camoufox-builder /bin/bash
 
 # 登录
 docker login
@@ -49,4 +51,14 @@ docker attach [CONTAINER_NAME or CONTAINER_ID]
 ```shell
 sudo docker ps
 docker commit [CONTAINER_NAME or CONTAINER_ID] dreamsxin/phalcon7:v1.1
+```
+
+## 编译
+连接上容器
+```shell
+cd camoufox-130-xxx
+make setup-minimal
+make mozbootstrap
+mkdir /app/dist
+python3 ./multibuild.py
 ```
